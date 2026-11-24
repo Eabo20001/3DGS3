@@ -1,0 +1,51 @@
+optimizer_type: adam
+optimizer_lr: 1.0e-3
+optimizer_wd: 0
+
+scheduler_type: CosineAnnealingWarmRestarts
+scheduler_periods: 5
+scheduler_restart_weights: 2
+scheduler_eta_min: 0
+
+max_epoch: 150
+
+dataset:
+  sh_degree: 3
+  source_path: ./dataset/garden/
+  model_path: ./output/garden/
+  images: images
+  depths: ''
+  resolution: 1296
+  white_background: False
+  train_test_exp: False
+  data_device: cuda
+  eval: True
+  kernel_size: 0.0 # Size of 2D filter in mip-splatting
+pipeline:
+  convert_SHs_python: False
+  compute_cov3D_python: False
+  debug: False
+  antialiasing: False
+
+
+FI_loss:
+  - name: Charbonnier_loss
+    args:
+      loss_weight: 1
+  - name: SSIM_loss
+    args:
+      loss_weight: 0.2
+  # - name: lap_loss
+  #   args:
+  #     loss_weight: 0.2
+
+SR_loss:
+  - name: Charbonnier_loss
+    args:
+      loss_weight: 1
+
+checkpoint:
+  path: ./checkpoint/
+  name: union_model
+  save_interval: 3
+
